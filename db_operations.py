@@ -19,17 +19,15 @@ async def get_profiles(session: Session):
 ##Traer usuario por id
 async def get_profile_by_id(session: Session, profile_id:int):
     return await session.get(ProfileSQL, profile_id)
-#modificar usuario:
- async def update_profile(session: Session, profile_id:int, profile_update:Dict[str, Any]):
+#modificar usuario
+
+async def update_profile(session: Session, profile_id:int, profile_update:Dict[str, Any]):
      profile = await session.get(ProfileSQL, profile_id)
      if profile is None:
          return None
-     profile_data = profile.dict()
      for key, value in profile_update.items():
-         if value is not None:
-             profile_data[key] = value
-     for key, value in profile_data.items():
-         setattr(profile, key, value)
+         if hasattr(profile, key) and value is not None:
+             setattr(profile, key, value)
      session.add(profile)
      await session.commit()
      await session.refresh(profile)
