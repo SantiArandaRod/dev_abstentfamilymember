@@ -1,19 +1,34 @@
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel import SQLModel
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession
+import os
+from dotenv import load_dotenv
 
-SQLALCHEMY_DATABASE_URL = ("sqlite+aiosqlite:///.database.db")
+load_dotenv()
 
-def get_engine():
-    return create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+POSTGRESQL_ADDON_USER = os.getenv('POSTGRESQL_ADDON_USER')
+POSTGRESQL_ADDON_PASSWORD = os.getenv('POSTGRESQL_ADDON_PASSWORD')
+POSTGRESQL_ADDON_HOST = os.getenv('POSTGRESQL_ADDON_HOST')
+POSTGRESQL_ADDON_PORT = os.getenv('POSTGRESQL_ADDON_PORT')
+POSTGRESQL_ADDON_DB = os.getenv('POSTGRESQL_ADDON_DB')
 
-AsyncSessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=get_engine(),
-    class_=AsyncSession,
+if POSTGRESQL_ADDON_PORT is None:
+    raise ValueError("POSTGRESQL_ADDON_PORT environment variable is not set.")
+CLEVER_DB= (
+    f"postgresql+asyncpg://{POSTGRESQL_ADDON_USER}:"
+    f"{POSTGRESQL_ADDON_PASSWORD}@"
+    f"{POSTGRESQL_ADDON_HOST}:"
+    f"{POSTGRESQL_ADDON_PORT}/"
+    f"{POSTGRESQL_ADDON_DB}"
 )
-
-async def get_db_session():
-    async with AsyncSessionLocal() as session:
+engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=True)
+AsyncSession = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
+async def get_session():
+    async with AsyncSession() as session:
         yield session
