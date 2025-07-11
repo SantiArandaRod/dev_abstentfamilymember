@@ -8,8 +8,9 @@ class ProfileBase(SQLModel):
     Name: str= Field(..., min_length=1,max_length=100)
     Relationship: str= Field(..., min_length=1,max_length=100)
     Message: str= Field(..., min_length=1,max_length=5000)
-    image_path: Optional[str] = None
-    confirmation: bool= Field(default=False)
+    Image_path: Optional[str] = None
+    Confirmation: bool= Field(default=False)
+    Audio_path: Optional[str] = None
 
 class ProfileSQL(ProfileBase, table=True):
     __tablename__ = "profiles"
@@ -22,3 +23,4 @@ class ProfileUpdate(SQLModel):
     Message: Optional[str] = None
     Image_path: Optional[str] = None
     Confirmation: Optional[bool] = None
+    Audio_path: Optional[str] = None
