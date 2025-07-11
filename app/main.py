@@ -1,7 +1,7 @@
 
 
 from fastapi import FastAPI, Depends
-from db_connection import get_session, init_db
+from app.db_connection import get_session, init_db
 from db_operations import *
 app = FastAPI()
 
@@ -14,7 +14,7 @@ async def root():
 async def startup():
     await init_db()
 ###Crear usuario
-@app.post("/profile", tags=["Profiles"])
+@app.post("/profile/", tags=["Profiles"])
 async def create_profile(profile: ProfileSQL, session: AsyncSession = Depends(get_session)):
     session.add(profile)
     await session.commit()

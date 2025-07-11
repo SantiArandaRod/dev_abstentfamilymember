@@ -20,5 +20,5 @@ class ProfileUpdate(SQLModel):
     Name: Optional[str] = None
     Relationship: Optional[str] = None
     Message: Optional[str] = None
-    image_path: Optional[str] = None
-    confirmation: Optional[bool] = None
+    Image_path: Optional[str] = None
+    Confirmation: Optional[bool] = None
