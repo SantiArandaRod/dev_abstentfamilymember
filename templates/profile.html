@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Perfil de {{ profile.Name }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg border-0">
+    {% if profile.Image_path %}
+    <img src="{{ profile.Image_path }}" class="card-img-top" alt="Imagen de {{ profile.Name }}" style="max-height: 300px; object-fit: cover;">
+    {% endif %}
+
+    <div class="card-body">
+        <h3 class="card-title">{{ profile.Name }}</h3>
+        <p class="card-text"><strong>Relación:</strong> {{ profile.Relationship }}</p>
+        <p class="card-text"><strong>Mensaje:</strong><br> {{ profile.Message }}</p>
+        <p class="card-text"><strong>Confirmación:</strong> {{ "Sí" if profile.Confirmation else "No" }}</p>
+
+        {% if profile.Audio_path %}
+        <div class="mt-3">
+            <p><strong>Audio asociado:</strong></p>
+            <audio controls class="w-100">
+                <source src="/{{ profile.Audio_path }}" type="audio/mpeg">
+                Tu navegador no soporta la reproducción de audio.
+            </audio>
+        </div>
+
+        <div class="mt-3">
+            <form method="get" action="/plot_audio/{{ profile.id }}">
+                <button type="submit" class="btn btn-outline-primary">Ver forma de onda</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<a href="/allProfiles" class="btn btn-link mt-4">← Volver a todos los perfiles</a>
+{% endblock %}

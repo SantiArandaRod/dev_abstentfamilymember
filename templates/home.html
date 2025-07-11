@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!-- templates/home.html -->
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<h2>Bienvenido a la app de Perfiles</h2>
+<p class="lead">Puedes agregar un nuevo perfil, ver todos los registrados o buscar por ID en la URL: <code>/profile/{id}</code></p>
+{% endblock %}

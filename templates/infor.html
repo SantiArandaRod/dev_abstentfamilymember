@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!-- templates/infor.html -->
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Información{% endblock %}
+
+{% block content %}
+<h2>Acerca de esta aplicación</h2>
+<p>Esta app permite registrar y visualizar perfiles con datos como nombre, relación, mensaje e imagen.</p>
+<p>Creada con FastAPI y SQLModel, y renderizada con Jinja2 y Bootstrap.</p>
+{% endblock %}
