@@ -2,26 +2,26 @@ from sqlmodel import Session, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from typing import Any, List, Optional, Dict
 from fastapi import HTTPException
-from modelsSQL import *
+from app.modelsSQL import *
 ##Crear usuario
-async def create_profile(session: Session, profile:ProfileSQL):
+async def create_profile(session: AsyncSession, profile:ProfileSQL):
     db_profile = ProfileSQL.model_validate(profile, from_attributes=True)
     session.add(db_profile)
     await session.commit()
     await session.refresh(db_profile)
     return db_profile
 ###Traer todos los usuarios
-async def get_profiles(session: Session):
+async def get_profiles(session: AsyncSession):
     query = select(ProfileSQL)
-    results = await session.exec(query)
-    profiles = results.all()
+    results = await session.execute(query)
+    profiles = results.scalars().all()
     return profiles
 ##Traer usuario por id
-async def get_profile_by_id(session: Session, profile_id:int):
+async def get_profile_by_id(session: AsyncSession, profile_id:int):
     return await session.get(ProfileSQL, profile_id)
 #modificar usuario
 
-async def update_profile(session: Session, profile_id:int, profile_update:Dict[str, Any]):
+async def update_profile(session: AsyncSession, profile_id:int, profile_update:Dict[str, Any]):
      profile = await session.get(ProfileSQL, profile_id)
      if profile is None:
          return None
